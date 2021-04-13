@@ -49,10 +49,10 @@
         // criando nosso cabeçalho
         echo "<tr>";
             echo "<th> ID </th>";
-            echo "<th> Name </th>";
-            echo "<th> Description </th>";
-            echo "<th> Price </th>";
-            echo "<th> Action </th>";
+            echo "<th> Nome </th>";
+            echo "<th> Descrição </th>";
+            echo "<th> Preço </th>";
+            echo "<th> Ações </th>";
         echo "</tr>";
 
         // recuperar couteúdo da tabela
