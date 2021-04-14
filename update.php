@@ -13,85 +13,84 @@
         <div class="page-header">
             <h1> Atualizar produto </h1>
         </div>
-        
+
         <?php
-        // recupere o valor do parâmetro, nesse caso, o ID de gravação 
-        // isset() é uma função do PHP usada para verificar se está presente ou não
-        $id = isset($_GET['id']) ? $_GET['id'] : die('Erro: ID de gravação não encontrado');
+// recupere o valor do parâmetro, nesse caso, o ID de gravação
+// isset() é uma função do PHP usada para verificar se está presente ou não
+$id = isset($_GET['id']) ? $_GET['id'] : die('Erro: ID de gravação não encontrado');
 
-        // incluir conexão com banco de dados
-        include 'config/database.php';
+// incluir conexão com banco de dados
+include 'config/database.php';
 
-        // Ler dado de gravação atual
-        try {
+// Ler dado de gravação atual
+try {
 
-            // preparar seleção de query 
-            $query = "SELECT id, name, description, price FROM products WHERE id = ? LIMIT 0,1";
-            $stmt = $con->prepare( $query );
+    // preparar seleção de query
+    $query = "SELECT id, name, description, price FROM products WHERE id = ? LIMIT 0,1";
+    $stmt = $con->prepare($query);
 
-            // este é o primeiro ponto de interrogação
-            $stmt->bindParam(1, $id);
+    // este é o primeiro ponto de interrogação
+    $stmt->bindParam(1, $id);
 
-            // executa a query
-            $stmt->execute();
+    // executa a query
+    $stmt->execute();
 
-            // armazena a linha recuperada em uma variável.
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // valor para preencherem nosso formulário
-            $name = $row['name'];
-            $description = $row['description'];
-            $price = $row['price'];
+    // armazena a linha recuperada em uma variável.
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        } catch(PDOException $exception){
-            // mostra erro
-            die('Erro: ' . $exception->getMessage());
-        }
+    // valor para preencherem nosso formulário
+    $name = $row['name'];
+    $description = $row['description'];
+    $price = $row['price'];
+
+} catch (PDOException $exception) {
+    // mostra erro
+    die('Erro: ' . $exception->getMessage());
+}
 ?>
- 
+
         <!-- Checa se o formulário foi preenchido -->
-        <?php 
+        <?php
 
-            if ($_POST){
-                try {
-                    // escreva uma query de atualização
-                    // neste caso que temos muitos campos
-                    // a serem passados, portanto é melhor
-                    // rotulá-los e não usar pontos de interrogação 
+if ($_POST) {
+    try {
+        // escreva uma query de atualização
+        // neste caso que temos muitos campos
+        // a serem passados, portanto é melhor
+        // rotulá-los e não usar pontos de interrogação
 
-                    $query = "UPDATE products
+        $query = "UPDATE products
                                 SET name=:name, description=:description, price=:price
                                 WHERE id = :id";
 
-                    // preparar query para execução
-                    $stmt = $con->prepare($query);
+        // preparar query para execução
+        $stmt = $con->prepare($query);
 
-                    // valores postados
-                    $name = htmlspecialchars(strip_tags($_POST['name']));
-                    $description = htmlspecialchars(strip_tags($_POST['description']));
-                    $price = htmlspecialchars(strip_tags($_POST['price']));
+        // valores postados
+        $name = htmlspecialchars(strip_tags($_POST['name']));
+        $description = htmlspecialchars(strip_tags($_POST['description']));
+        $price = htmlspecialchars(strip_tags($_POST['price']));
 
-                    // aninhar parâmetros
-                    $stmt->bindParam(':name', $name);
-                    $stmt->bindParam(':description', $description);
-                    $stmt->bindParam(':price', $price);
-                    $stmt->bindParam(':id', $id);
+        // aninhar parâmetros
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':id', $id);
 
-                    // executa a query
-                    if($stmt->execute()){
-                        echo "<div class='alert alert-success'>Gravação atualizada com sucesso. </div>";
-                    } else {
-                        echo "<div class='alert alert-danger'> Não foi possível atualizar, tente novamente.</div>";
-                    }
+        // executa a query
+        if ($stmt->execute()) {
+            echo "<div class='alert alert-success'>Gravação atualizada com sucesso. </div>";
+        } else {
+            echo "<div class='alert alert-danger'> Não foi possível atualizar, tente novamente.</div>";
+        }
 
-                    // mostrar erros
-                } catch (PDOException $exception){
-                        die('Erro: ' . $exception->getMessage());
-                    }
-            }
-                
+        // mostrar erros
+    } catch (PDOException $exception) {
+        die('Erro: ' . $exception->getMessage());
+    }
+}
 
-        ?>
+?>
 
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="POST">
             <table class="table table-hover table-responsive table-bordered">
@@ -123,7 +122,7 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-   
+
 <!-- Latest compiled and minified Bootstrap JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>

@@ -19,7 +19,7 @@
     <!-- Container -->
     <div class="container">
         <div class="page-header">
-            <h1>Read products</h1>
+            <h1>Ler produtos</h1>
         </div>
     
     <!-- PHP code goes here -->
@@ -28,7 +28,14 @@
     // incluir banco de dados
     include 'config/database.php';
 
-    // mensagem de erro de prompt ficará aqui
+    $action = isset($_GET['action']) ? $_GET['action'] : "";
+    
+    // se foi redirecionado do delete.php
+    if($action=='deleted'){
+        echo "<div class='alert alert-success'>Registro deletado com sucesso</div>";
+    }
+
+
 
     // selecionar todos os dados
     $query = "SELECT id, name, description, price FROM products ORDER BY id DESC";
@@ -94,7 +101,7 @@
         echo "<div class='alert alert-danger'> Nenhuma gravação encontrada </div>";
     }
 
-// teste gitmoji
+
 ?>
 
     </div> <!-- end of container -->
@@ -105,7 +112,18 @@
 <!-- Latest compiled and minified Bootstrap JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- confirm delete record will be here -->
+<script type="text/javascript">
+    // confirme gravação à deletar
+    function delete_user(id){
+        var answer = confirm('Tem certeza?');
+        if (answer){
+            // se o usuário confirmou,
+            // passa o ID para o delete.php e executa
+            //  a query para apagar
+            window.location = 'delete.php?id=' + id;
+        }
+    }
+</script>
 
 </body>
 </html>
